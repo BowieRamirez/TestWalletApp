@@ -332,11 +332,7 @@ This will:
 6. Open a Pull Request
 
 
----
 
-## 🆘 Support
-
-For support, email dev@bowieramirez.com or open an issue on GitHub.
 
 ---
 
