@@ -331,11 +331,6 @@ This will:
 5. Push to the branch: `git push origin feature/your-feature`
 6. Open a Pull Request
 
----
-
-## 📄 License
-
-This project is proprietary and confidential.
 
 ---
 
