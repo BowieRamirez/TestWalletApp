@@ -1,9 +1,18 @@
-/**
- * App Initialization
- *
- * Application bootstrap and initialization logic
- */
+// App initialization exports
+export {
+  initializeApp,
+  isDevelopment,
+  isSimulator,
+  getAppVersion,
+  type AppInitOptions,
+  type AppInitResult,
+} from './app-init';
 
-export const initApp = () => {
-  // TODO: Implement app initialization
-};
+// Security initialization exports
+export {
+  initializeSecurity,
+  getSecurityStatus,
+  clearAllSecureData,
+  type SecurityInitOptions,
+  type SecurityInitResult,
+} from './security-init';

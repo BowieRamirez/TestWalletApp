@@ -1,0 +1,30 @@
+{
+  "name": "@banking/api",
+  "version": "1.0.0",
+  "description": "HTTP client and API utilities for the banking application",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "peerDependencies": {
+    "@banking/security": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  },
+  "keywords": [
+    "api",
+    "http",
+    "client",
+    "banking"
+  ],
+  "license": "MIT"
+}

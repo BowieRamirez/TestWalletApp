@@ -1,8 +1,23 @@
-/**
- * App Layer
- *
- * Application entry point and top-level configuration
- */
+// Provider exports
+export {
+  AppProviders,
+  QueryProvider,
+  AuthProvider,
+  SecurityProvider,
+  useAuth,
+} from './providers';
 
-export * from './providers';
-export * from './init';
+// Initialization exports
+export {
+  initializeApp,
+  initializeSecurity,
+  isDevelopment,
+  isSimulator,
+  getAppVersion,
+  getSecurityStatus,
+  clearAllSecureData,
+  type AppInitOptions,
+  type AppInitResult,
+  type SecurityInitOptions,
+  type SecurityInitResult,
+} from './init';
