@@ -1,10 +1,9 @@
 /**
  * Shared Hooks
  *
- * Reusable React hooks
+ * Reusable React hooks for common functionality
  */
 
-export const useAppState = () => {
-  // TODO: Implement app state hook
-  return {};
-};
+export * from './use-secure-storage';
+export * from './use-inactivity-timer';
+export * from './use-biometric';
