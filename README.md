@@ -189,9 +189,3 @@ steps:
   - run: pnpm test
   - run: eas build --profile preview   # Optional EAS Build
 ```
-
----
-
-## License
-
-This project is private and proprietary.
