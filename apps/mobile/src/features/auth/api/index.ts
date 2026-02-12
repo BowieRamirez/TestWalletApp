@@ -4,14 +4,25 @@
  * API endpoints and methods for authentication
  */
 
-export const authApi = {
-  login: async () => {
-    // TODO: Implement login API
-  },
-  logout: async () => {
-    // TODO: Implement logout API
-  },
-  refreshToken: async () => {
-    // TODO: Implement token refresh
-  },
-};
+// Login
+export {
+  login,
+  loginWithBiometrics,
+  type LoginCredentials,
+  type LoginResult,
+} from './login';
+
+// Logout
+export {
+  logout,
+  logoutAllDevices,
+  type LogoutResponse,
+} from './logout';
+
+// Refresh Token
+export {
+  refreshToken,
+  refreshTokenWithToken,
+  type RefreshTokenRequest,
+  type RefreshTokenResponse,
+} from './refresh-token';

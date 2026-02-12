@@ -4,7 +4,14 @@
  * Utility functions and helpers for authentication
  */
 
-export const isTokenValid = (token: string): boolean => {
-  // TODO: Implement token validation
-  return !!token;
-};
+export {
+  checkSessionValidity,
+  isTokenExpired,
+  handleSessionExpiration,
+  scheduleTokenRefresh,
+  clearScheduledTokenRefresh,
+  performTokenRefreshIfNeeded,
+  forceTokenRefresh,
+  getTimeUntilExpiration,
+  initializeSession,
+} from './session-manager';

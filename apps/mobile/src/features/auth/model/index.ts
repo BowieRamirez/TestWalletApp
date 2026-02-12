@@ -1,17 +1,24 @@
 /**
  * Auth Model
  *
- * State management and business logic for authentication
+ * State management and types for authentication
  */
 
-export interface AuthState {
-  isAuthenticated: boolean;
-  user: null | Record<string, unknown>;
-  token: string | null;
-}
+// Types
+export type {
+  AuthState,
+  User,
+  AuthTokens,
+} from './types';
 
-export const initialAuthState: AuthState = {
-  isAuthenticated: false,
-  user: null,
-  token: null,
-};
+export { AuthStatus } from './types';
+
+// Store
+export {
+  useAuthStore,
+  selectUser,
+  selectTokens,
+  selectIsAuthenticated,
+  selectIsLoading,
+  selectError,
+} from './store';
