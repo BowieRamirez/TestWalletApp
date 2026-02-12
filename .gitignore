@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Turborepo
+.turbo/
+
+# Expo
+.expo/
+dist/
+
+# Native builds (CNG)
+apps/mobile/ios/
+apps/mobile/android/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Build outputs
+*.tsbuildinfo

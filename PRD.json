@@ -1,0 +1,146 @@
+{
+  "document_meta": {
+    "title": "Banking Mobile App - Frontend Migration & Architecture PRD",
+    "version": "1.0.0",
+    "status": "Draft",
+    "last_updated": "2026-02-12",
+    "objective": "To define the product requirements and technical architecture for migrating frontend design codes into a scalable, clean Expo (React Native) monorepo environment using pnpm and Turborepo."
+  },
+  "product_overview": {
+    "description": "A feature-rich mobile banking application delivering secure, performant, and intuitive financial services, utilizing a shared design system.",
+    "target_platforms": ["iOS", "Android"],
+    "key_value_propositions": [
+      "Bank-grade security with biometric authentication.",
+      "Real-time transaction updates.",
+      "Seamless money transfers.",
+      "Unified design system for consistent UI across screens."
+    ]
+  },
+  "technical_stack": {
+    "core": {
+      "framework": "React Native (via Expo SDK 52+)",
+      "language": "TypeScript",
+      "monorepo_tool": "Turborepo",
+      "package_manager": "pnpm",
+      "navigation": "Expo Router (File-based routing)"
+    },
+    "state_management": {
+      "global": "Zustand (Lightweight client state)",
+      "server_state": "TanStack Query (API caching/fetching)",
+      "persistence": "react-native-mmkv (Secure local storage)"
+    },
+    "styling": {
+      "library": "NativeWind (Tailwind CSS) or Tamagui",
+      "iconography": "Lucide React Native"
+    },
+    "networking": {
+      "client": "Axios or Fetch API",
+      "schema_validation": "Zod"
+    }
+  },
+  "architecture_structure": {
+    "pattern": "Clean Architecture within a Monorepo",
+    "rationale": "Isolating the UI library and configurations ensures the main app logic remains uncluttered. Turborepo caches builds to speed up the dev loop.",
+    "diagram_description": "Root (Turborepo) -> Workspace: apps/mobile (Consumes UI & Config) -> Workspace: packages/ui (Exports Components) -> Workspace: packages/config (Exports TS/ESLint)",
+    "data_flow": "Unidirectional: UI Event -> Service/Hook -> Store Update -> UI Re-render."
+  },
+  "project_structure": {
+    "root_directory": {
+      "pnpm-workspace.yaml": "Defines workspace locations: packages: - 'apps/*' - 'packages/*'",
+      "package.json": "Root scripts (e.g., 'pnpm run dev', 'pnpm run build')",
+      "turbo.json": "Pipeline configuration for caching tasks like build, lint, and test"
+    },
+    "apps": {
+      "mobile": {
+        "description": "The main Expo consumer application",
+        "structure": {
+          "app": "Expo Router directory (file-system based routing for screens)",
+          "src": {
+            "features": "Domain-driven feature modules (e.g., auth, accounts, transfers)",
+            "hooks": "Application-specific logic hooks",
+            "providers": "Global context providers (e.g., AuthProvider, QueryClientProvider)",
+            "services": "API integration layer"
+          },
+          "assets": "Static assets (fonts, images)",
+          "app.json": "Expo configuration",
+          "babel.config.js": "Babel setup (extends root config)"
+        }
+      }
+    },
+    "packages": {
+      "ui": {
+        "description": "Isolated Design System (The migrated frontend codes)",
+        "structure": {
+          "src": {
+            "components": "Reusable atoms/molecules (Button, Card, Input)",
+            "theme": "Design tokens (colors, spacing, typography)",
+            "utils": "UI-specific helper functions"
+          },
+          "package.json": "Exports component library (e.g., @mybank/ui)"
+        }
+      },
+      "tsconfig": {
+        "description": "Shared TypeScript configurations",
+        "structure": {
+          "base.json": "Base compiler options",
+          "react-native.json": "RN specific options",
+          "package.json": "Exports @mybank/tsconfig"
+        }
+      },
+      "eslint-config": {
+        "description": "Shared Linting configurations",
+        "structure": {
+          "index.js": "Standard ruleset",
+          "package.json": "Exports @mybank/eslint-config"
+        }
+      }
+    }
+  },
+  "core_features_requirements": [
+    {
+      "id": "AUTH-001",
+      "feature": "Secure Authentication",
+      "requirements": [
+        "Biometric login (FaceID/TouchID) using expo-local-authentication.",
+        "Secure storage of auth tokens using expo-secure-store.",
+        "Auto-logout on background activity (AppState monitoring)."
+      ]
+    },
+    {
+      "id": "DASH-001",
+      "feature": "Account Dashboard",
+      "requirements": [
+        "Aggregate balance view with 'hide balance' toggle.",
+        "Quick access carousel for frequent actions.",
+        "Pull-to-refresh for updating account status."
+      ]
+    },
+    {
+      "id": "TRANS-001",
+      "feature": "Money Transfers",
+      "requirements": [
+        "Multi-step form wizard for transfers (Recipient -> Amount -> Review -> PIN).",
+        "Favorite recipients list stored locally or fetched from API.",
+        "Transaction receipt generation."
+      ]
+    }
+  ],
+  "quality_assurance": {
+    "testing_strategy": {
+      "unit": "Jest (configured via root workspace)",
+      "component": "React Native Testing Library (RNTL)",
+      "e2e": "Maestro (yaml-based flows)",
+      "linting": "ESLint + Prettier (enforced via @mybank/eslint-config)"
+    },
+    "ci_cd": {
+      "platform": "GitHub Actions",
+      "steps": [
+        "Install dependencies: 'pnpm install --frozen-lockfile'",
+        "Lint check: 'pnpm lint'",
+        "Type check: 'pnpm type-check'",
+        "Unit tests: 'pnpm test'",
+        "EAS Update/Build: 'eas build --profile preview'"
+      ]
+    }
+  }
+}
