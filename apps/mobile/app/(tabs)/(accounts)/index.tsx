@@ -3,9 +3,13 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Iconify } from "react-native-iconify";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import { useAuthStore } from "@/features/auth/stores/auth-store";
+import { toast } from "sonner-native";
 
 export default function CardsScreen() {
   const t = useThemeColors();
+  const userName = useAuthStore((s) => s.user?.name ?? "Alexander Doe");
+  const [cardFrozen, setCardFrozen] = React.useState(false);
 
   return (
     <View className="flex-1" style={{ backgroundColor: t.bg }}>
@@ -57,7 +61,7 @@ export default function CardsScreen() {
                     CARD HOLDER
                   </Text>
                   <Text className="text-sm font-medium" style={{ color: t.textPrimary }}>
-                    Alexander Doe
+                    {userName}
                   </Text>
                 </View>
                 <View className="items-end">
@@ -75,7 +79,7 @@ export default function CardsScreen() {
           {/* Card Action Buttons */}
           <View className="flex-row px-5 pt-6 gap-3">
             {[
-              { icon: "mdi:snowflake", label: "Freeze" },
+              { icon: "mdi:snowflake", label: cardFrozen ? "Unfreeze" : "Freeze" },
               { icon: "mdi:file-document-outline", label: "Details" },
               { icon: "mdi:refresh", label: "Replace" },
               { icon: "mdi:cog-outline", label: "Manage" },
@@ -86,6 +90,18 @@ export default function CardsScreen() {
                 style={({ pressed }) => ({
                   backgroundColor: pressed ? t.surfaceElevated : t.surface,
                 })}
+                onPress={() => {
+                  if (label === "Freeze" || label === "Unfreeze") {
+                    setCardFrozen(!cardFrozen);
+                    toast(cardFrozen ? "Card unfrozen" : "Card frozen");
+                  } else if (label === "Details") {
+                    toast("Card ending in 2912 — Expires 12/25");
+                  } else if (label === "Replace") {
+                    toast("Card replacement requested");
+                  } else {
+                    toast("Card management coming soon");
+                  }
+                }}
               >
                 <View
                   className="h-10 w-10 rounded-full items-center justify-center"
@@ -162,6 +178,7 @@ export default function CardsScreen() {
                   ? (t.isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)")
                   : "transparent",
               })}
+              onPress={() => toast("Virtual card created!")}
             >
               <Iconify icon="mdi:plus" size={18} color="#9FE870" />
               <Text className="text-base font-medium text-[#9FE870]">

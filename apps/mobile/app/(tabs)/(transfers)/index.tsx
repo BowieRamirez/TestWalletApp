@@ -4,6 +4,26 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Iconify } from "react-native-iconify";
 import { useThemeColors } from "@/hooks/use-theme-colors";
 
+const PERIODS = ["Week", "Month", "Year"] as const;
+
+const spendingData: Record<string, { bars: number[]; days: string[]; total: string }> = {
+  Week: {
+    bars: [40, 65, 45, 80, 55, 90, 70],
+    days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    total: "₱3,580.00",
+  },
+  Month: {
+    bars: [60, 75, 50, 85, 70, 40, 65, 90, 55, 80, 45, 70],
+    days: ["W1", "W2", "W3", "W4", "", "", "", "", "", "", "", ""],
+    total: "₱14,320.00",
+  },
+  Year: {
+    bars: [55, 70, 80, 65, 75, 90, 85, 60, 70, 95, 80, 75],
+    days: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    total: "₱171,840.00",
+  },
+};
+
 const categories = [
   {
     name: "Shopping",
@@ -44,6 +64,11 @@ const categories = [
 
 export default function AnalyticsScreen() {
   const t = useThemeColors();
+  const [selectedPeriod, setSelectedPeriod] = React.useState<(typeof PERIODS)[number]>("Month");
+
+  const currentData = spendingData[selectedPeriod];
+  const displayBars = selectedPeriod === "Week" ? currentData.bars : currentData.bars.slice(0, selectedPeriod === "Month" ? 4 : 12);
+  const displayDays = selectedPeriod === "Week" ? currentData.days : currentData.days.slice(0, selectedPeriod === "Month" ? 4 : 12);
 
   return (
     <View className="flex-1" style={{ backgroundColor: t.bg }}>
@@ -60,47 +85,54 @@ export default function AnalyticsScreen() {
 
           {/* Period Selector */}
           <View className="flex-row px-5 mb-6 gap-2">
-            {["Week", "Month", "Year"].map((period, idx) => (
-              <Pressable
-                key={period}
-                className="px-5 py-2.5 rounded-full"
-                style={{
-                  backgroundColor: idx === 1 ? "#9FE870" : t.surface,
-                  borderWidth: idx === 1 ? 0 : 1,
-                  borderColor: idx === 1 ? undefined : t.border,
-                }}
-              >
-                <Text
-                  className="text-sm font-medium"
-                  style={{ color: idx === 1 ? "#000000" : t.textPrimary }}
+            {PERIODS.map((period) => {
+              const isActive = period === selectedPeriod;
+              return (
+                <Pressable
+                  key={period}
+                  className="px-5 py-2.5 rounded-full"
+                  style={{
+                    backgroundColor: isActive ? "#9FE870" : t.surface,
+                    borderWidth: isActive ? 0 : 1,
+                    borderColor: isActive ? undefined : t.border,
+                  }}
+                  onPress={() => setSelectedPeriod(period)}
                 >
-                  {period}
-                </Text>
-              </Pressable>
-            ))}
+                  <Text
+                    className="text-sm font-medium"
+                    style={{ color: isActive ? "#000000" : t.textPrimary }}
+                  >
+                    {period}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
 
-          {/* Spending Chart Placeholder */}
+          {/* Spending Chart */}
           <View className="mx-5 rounded-2xl p-6 mb-6" style={{ backgroundColor: t.surface }}>
-            {/* Simple bar chart representation */}
+            {/* Bar chart */}
             <View className="flex-row items-end justify-between h-32 gap-2 mb-4">
-              {[40, 65, 45, 80, 55, 90, 70].map((height, idx) => (
-                <View key={idx} className="flex-1 items-center">
-                  <View
-                    className="w-full rounded-lg"
-                    style={{
-                      height: `${height}%`,
-                      backgroundColor:
-                        idx === 5 ? "#9FE870" : "rgba(159, 232, 112, 0.2)",
-                      borderRadius: 6,
-                    }}
-                  />
-                </View>
-              ))}
+              {displayBars.map((height, idx) => {
+                const maxIdx = displayBars.indexOf(Math.max(...displayBars));
+                return (
+                  <View key={idx} className="flex-1 items-center">
+                    <View
+                      className="w-full rounded-lg"
+                      style={{
+                        height: `${height}%`,
+                        backgroundColor:
+                          idx === maxIdx ? "#9FE870" : "rgba(159, 232, 112, 0.2)",
+                        borderRadius: 6,
+                      }}
+                    />
+                  </View>
+                );
+              })}
             </View>
             <View className="flex-row justify-between">
-              {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-                <Text key={d} className="text-xs" style={{ color: t.textSecondary }}>
+              {displayDays.map((d, i) => (
+                <Text key={`${d}-${i}`} className="text-xs" style={{ color: t.textSecondary }}>
                   {d}
                 </Text>
               ))}
@@ -115,14 +147,14 @@ export default function AnalyticsScreen() {
                   Total Spent
                 </Text>
                 <Text className="text-2xl font-bold" style={{ color: t.textPrimary }}>
-                  ₱3,580.00
+                  {currentData.total}
                 </Text>
               </View>
               <Pressable
                 className="flex-row items-center gap-1 px-3 py-2 rounded-full"
                 style={{ backgroundColor: t.surfaceElevated }}
               >
-                <Text className="text-sm" style={{ color: t.textPrimary }}>This Month</Text>
+                <Text className="text-sm" style={{ color: t.textPrimary }}>This {selectedPeriod}</Text>
                 <Iconify icon="mdi:chevron-down" size={14} color={t.textSecondary} />
               </Pressable>
             </View>

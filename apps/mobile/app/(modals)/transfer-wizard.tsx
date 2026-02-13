@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { Button, Input, Card, Avatar } from "@mybank/ui";
 import { useTransferWizard } from "@/features/transfers/stores/transfer-wizard-store";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import { toast } from "sonner-native";
 
 type Step = "recipient" | "amount" | "review" | "pin";
 
@@ -23,7 +24,9 @@ export default function TransferWizardScreen() {
   const t = useThemeColors();
 
   const handleConfirm = async () => {
-    // TODO: Call transfer API service
+    // Simulate transfer processing
+    toast("Processing transfer...");
+    await new Promise((resolve) => setTimeout(resolve, 1200));
     reset();
     router.replace("/(modals)/receipt");
   };

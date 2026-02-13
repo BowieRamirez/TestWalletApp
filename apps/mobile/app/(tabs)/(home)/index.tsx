@@ -1,15 +1,17 @@
 import React, { useCallback } from "react";
 import { View, Text, ScrollView, RefreshControl, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 import { Iconify } from "react-native-iconify";
 import { TransactionItem } from "@mybank/ui";
 import { useAccounts } from "@/features/accounts/hooks/use-accounts";
 import { useAuthStore } from "@/features/auth/stores/auth-store";
 import { useThemeColors } from "@/hooks/use-theme-colors";
+import { toast } from "sonner-native";
 
 export default function HomeScreen() {
   const { data: accounts, isLoading, refetch } = useAccounts();
-  const userName = useAuthStore((s) => s.user?.name ?? "User");
+  const userName = useAuthStore((s) => s.user?.name ?? "Alexander Doe");
   const t = useThemeColors();
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -18,22 +20,27 @@ export default function HomeScreen() {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
+    toast("Refreshed");
   }, [refetch]);
 
-  const totalBalance = accounts?.totalBalance ?? 24500.0;
+  const totalBalance = accounts?.totalBalance ?? 57711.25;
 
   // Transaction icons mapping
   const getTransactionIcon = (title: string) => {
     const lower = title.toLowerCase();
-    if (lower.includes("shop") || lower.includes("store"))
+    if (lower.includes("grocery") || lower.includes("shop") || lower.includes("store"))
       return <Iconify icon="mdi:shopping-outline" size={18} color="#9FE870" />;
     if (lower.includes("coffee") || lower.includes("food"))
       return <Iconify icon="mdi:coffee-outline" size={18} color="#FBBF24" />;
-    if (lower.includes("electric") || lower.includes("util"))
+    if (lower.includes("electric") || lower.includes("util") || lower.includes("bill"))
       return <Iconify icon="mdi:flash" size={18} color="#60A5FA" />;
+    if (lower.includes("netflix") || lower.includes("subscri"))
+      return <Iconify icon="mdi:filmstrip" size={18} color="#A78BFA" />;
+    if (lower.includes("salary") || lower.includes("deposit") || lower.includes("transfer"))
+      return <Iconify icon="mdi:arrow-bottom-left" size={18} color="#9FE870" />;
     if (lower.includes("internet") || lower.includes("wifi"))
       return <Iconify icon="mdi:wifi" size={18} color="#A78BFA" />;
-    return <Iconify icon="mdi:shopping-outline" size={18} color="#9FE870" />;
+    return <Iconify icon="mdi:swap-horizontal" size={18} color="#9FE870" />;
   };
 
   return (
@@ -69,6 +76,7 @@ export default function HomeScreen() {
             <Pressable
               className="h-10 w-10 rounded-full items-center justify-center"
               style={{ backgroundColor: t.surface }}
+              onPress={() => toast("No new notifications")}
             >
               <Iconify icon="mdi:bell-outline" size={20} color={t.iconDefault} />
             </Pressable>
@@ -101,6 +109,7 @@ export default function HomeScreen() {
               style={({ pressed }) => ({
                 backgroundColor: pressed ? t.surfaceElevated : t.surface,
               })}
+              onPress={() => router.push("/(modals)/transfer-wizard")}
             >
               <View className="h-8 w-8 rounded-full bg-[#9FE870] items-center justify-center">
                 <Iconify icon="mdi:arrow-top-right" size={16} color="#000" />
@@ -112,6 +121,7 @@ export default function HomeScreen() {
               style={({ pressed }) => ({
                 backgroundColor: pressed ? t.surfaceElevated : t.surface,
               })}
+              onPress={() => toast("Request money feature coming soon")}
             >
               <View
                 className="h-8 w-8 rounded-full items-center justify-center"

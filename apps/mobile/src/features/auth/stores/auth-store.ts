@@ -40,7 +40,7 @@ const authStore = createStore<AuthStore>((set) => ({
 
       const mockUser: User = {
         id: "1",
-        name: "John Doe",
+        name: "Alexander Doe",
         email,
       };
       const mockToken = "mock-jwt-token";

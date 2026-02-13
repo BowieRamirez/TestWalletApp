@@ -52,23 +52,13 @@ export function Button({
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
-  const getBackgroundColor = (pressed: boolean) => {
-    switch (variant) {
-      case "primary":
-        return pressed ? "#7CC84E" : "#9FE870";
-      case "secondary":
-        return pressed
-          ? (colors?.secondaryBg ? undefined : "#2C2C2E")
-          : (colors?.secondaryBg ?? "#1C1C1E");
-      case "outline":
-      case "ghost":
-        return pressed ? "rgba(255,255,255,0.05)" : "transparent";
-      case "danger":
-        return pressed ? "#DC2626" : "#EF4444";
-      default:
-        return "#9FE870";
-    }
-  };
+  const variantClasses = {
+    primary: "bg-[#9FE870] active:bg-[#7CC84E]",
+    secondary: `active:bg-[#2C2C2E] ${colors?.secondaryBg ? "" : "bg-[#1C1C1E]"}`,
+    outline: "bg-transparent active:bg-white/5 border border-white/10",
+    ghost: "bg-transparent active:bg-white/5",
+    danger: "bg-[#EF4444] active:bg-[#DC2626]",
+  } as const;
 
   const getTextColor = () => {
     switch (variant) {
@@ -102,13 +92,16 @@ export function Button({
       className={cn(
         "flex-row items-center justify-center",
         sizeStyles[size],
+        variantClasses[variant],
         fullWidth && "w-full",
         isDisabled && "opacity-50",
         className
       )}
       style={({ pressed }) => [
-        { backgroundColor: getBackgroundColor(pressed) },
         getBorderStyle(),
+        colors?.secondaryBg && variant === "secondary"
+          ? { backgroundColor: colors.secondaryBg }
+          : undefined,
         typeof style === "function" ? style({ pressed }) : style,
       ]}
       disabled={isDisabled}
